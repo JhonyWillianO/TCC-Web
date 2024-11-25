@@ -1,0 +1,111 @@
+/* Geral */
+body {
+  background-color: #f0f0f0;
+  color: #333;
+  font-family: Arial, sans-serif;
+}
+
+header {
+  background-image: url("assets/bg.png");
+  background-size: cover;
+  background-position: center;
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+main {
+  padding: 20px;
+}
+
+.header-img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 5px solid white;
+}
+
+#menu {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Card do Produto */
+.product-card {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.product-img {
+  width: 90px;
+  height: 90px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+}
+
+.card-text {
+  font-size: 14px;
+  color: #666;
+  margin: 5px 0;
+}
+
+.text-primary {
+  color: #007bff !important;
+  font-size: 16px;
+}
+
+.cart-btn {
+  cursor: pointer;
+  font-size: 24px;
+  color: #007bff;
+  transition: color 0.2s;
+}
+
+.cart-btn:hover {
+  color: #0056b3;
+}
+
+/* Status */
+#status {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#carrinho-modal {
+  display: none;
+}
+
+#carrinho-modal.d-none {
+  display: none !important;
+}
+
+.fixed-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+}
