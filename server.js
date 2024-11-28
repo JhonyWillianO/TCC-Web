@@ -6,7 +6,7 @@ const cors = require('cors'); // Importando o pacote cors
 const app = express();
 
 // Habilitar o CORS para todas as rotas
-app.use(cors());  // Isso permitirá qualquer origem (você pode restringir a origem se necessário)
+app.use(cors());  // Isso permitirá qualquer origem 
 
 // Configuração do banco de dados MySQL
 const connection = mysql.createConnection({

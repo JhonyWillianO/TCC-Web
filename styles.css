@@ -27,13 +27,22 @@ main {
   border: 5px solid white;
 }
 
+/* Menu */
 #menu {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
+  grid-template-columns: 1fr; /* Cada categoria ocupa 100% da largura */
+  gap: 40px; /* Espaçamento entre as categorias */
   padding: 20px;
-  max-width: 1200px;
+  width: 100%; /* Garantindo largura total */
   margin: 0 auto;
+}
+
+/* Container para os produtos de cada categoria */
+.category-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Produtos se ajustam à largura */
+  gap: 20px;
+  width: 100%;
 }
 
 /* Card do Produto */
@@ -108,4 +117,71 @@ main {
   bottom: 0;
   left: 0;
   z-index: 999;
+}
+
+/* Títulos das Categorias */
+.category-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-top: 40px;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
+}
+
+/* Ajustes para Mobile */
+@media (max-width: 768px) {
+  .product-card {
+    padding: 15px;
+  }
+  
+  .category-title {
+    font-size: 24px;
+  }
+
+  #menu {
+    gap: 20px;
+  }
+
+  .product-card {
+    padding: 15px;
+    flex-direction: column;
+  }
+}
+
+/* Modal */
+.modal {
+  display: none; /* Inicialmente oculto */
+  position: fixed;
+  z-index: 1; /* Fica acima do conteúdo da página */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4); /* Fundo translúcido */
+}
+
+/* Conteúdo do modal */
+.modal-content {
+  background-color: white;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 600px;
+}
+
+/* Estilo para o botão de remover item */
+.cart-item button {
+  margin-left: 10px;
+}
+
+/* Campo de endereço */
+.address-field {
+  margin-top: 15px;
+}
+
+.address-field input {
+  width: 100%;
 }
