@@ -28,7 +28,9 @@ O projeto utiliza **MySQL** como banco de dados. Você pode instalar o MySQL seg
 #### Como criar o banco de dados:
 Após instalar o MySQL, crie o banco de dados para o projeto com o comando SQL:
 
-```sql CREATE DATABASE lanchonete;
+sql 
+
+CREATE DATABASE lanchonete;
 
 3. Instalando o Node.js
 O Node.js é uma plataforma necessária para rodar o backend deste projeto. Para instalá-lo:
@@ -83,11 +85,11 @@ cd frontend
 npm start
 Agora, o projeto estará rodando localmente em http://localhost:3000.
 
-Links Importantes
-World do TCC - Documentação Completa
-Site da Lanchonete Espaço Jasmim - Acesso ao Sistema
-markdown
-Copiar código
+## Links Importantes
+
+- [World do TCC - Documentação Completa](https://docs.google.com/document/d/1C1xGlQ7D48dGEjzih7nDFeEraCE7HPAT/edit?usp=sharing&ouid=103039358260410191770&rtpof=true&sd=true)
+- [Site da Lanchonete Espaço Jasmim - Acesso ao Sistema](https://lanchonetejasmim.netlify.app)
+
 
 ### Dicas para o GitHub:
 
@@ -96,9 +98,6 @@ Copiar código
 3. **GitHub:** Caso o repositório seja privado, recomende que os usuários usem chaves SSH para clonar o repositório, ou forneça as instruções para acesso privado, se necessário.
 
 Esse modelo estará bem estruturado e profissional para ser usado no GitHub.
-
-
-
 
 
 
