@@ -1,6 +1,102 @@
+// API URL e carrinho
 const apiUrl = "http://localhost:3000/api/dados"; // URL de API Node.js
 const menuContainer = document.getElementById("menu");
 let cart = []; // Array para armazenar os itens do carrinho
+
+// Configurações do mini-game
+let score = 0;
+let totalTargets = 5;
+let gameActive = false;
+
+// Referências do mini-game
+const startGameButton = document.getElementById("start-game");
+const gameArea = document.getElementById("game-area");
+const gameMessage = document.getElementById("game-message");
+
+// Função para iniciar o mini-game
+startGameButton.addEventListener("click", () => {
+  if (gameActive) return; // Evita reiniciar durante o jogo
+  gameActive = true;
+  score = 0;
+  gameMessage.textContent = "";
+  gameArea.innerHTML = ""; // Limpa o campo
+  gameArea.style.display = "block";
+  startGame();
+});
+
+// Função para criar alvos com imagem como uma tag <img>
+function createTarget() {
+  const target = document.createElement("div");
+  target.classList.add("target");
+
+  // Criando a tag <img> e configurando sua src
+  const img = document.createElement("img");
+  img.src = "./assets/mascote.jpg";  // Substitua pelo caminho correto
+  img.style.width = "50px";  // Defina o tamanho da bola
+  img.style.height = "50px"; // Defina o tamanho da bola
+  
+  target.appendChild(img); // Adiciona a imagem dentro da div
+
+  // Posicionamento aleatório
+  const x = Math.random() * (gameArea.offsetWidth - 50);
+  const y = Math.random() * (gameArea.offsetHeight - 50);
+  target.style.left = `${x}px`;
+  target.style.top = `${y}px`;
+
+  // Clique no alvo
+  target.addEventListener("click", () => {
+    score++;
+    target.remove(); // Remove o alvo clicado
+
+    if (score === totalTargets) {
+      gameActive = false;
+      gameArea.style.display = "none";
+      gameMessage.textContent = "Parabéns! Você ganhou um desconto especial.";
+      applyDiscount();
+    }
+  });
+
+  gameArea.appendChild(target);
+
+  // Remove o alvo após 2 segundos se não for clicado
+  setTimeout(() => {
+    if (gameActive && target.parentElement) {
+      target.remove();
+      checkGameOver();
+    }
+  }, 2000);
+}
+
+// Função principal do mini-game
+function startGame() {
+  for (let i = 0; i < totalTargets; i++) {
+    setTimeout(() => {
+      if (gameActive) createTarget();
+    }, i * 1000); // Intervalos de 1 segundo
+  }
+}
+
+// Verifica se o jogo acabou sem atingir todos os alvos
+function checkGameOver() {
+  const remainingTargets = gameArea.querySelectorAll(".target").length;
+  if (!remainingTargets && score < totalTargets) {
+    gameActive = false;
+    gameArea.style.display = "none";
+    gameMessage.textContent = "Jogo encerrado! Tente novamente.";
+  }
+}
+
+// Aplica o desconto ao carrinho
+function applyDiscount() {
+  const discount = 10; // Desconto de 10%
+  cart = cart.map((item) => {
+    item.price = item.price * (1 - discount / 100);
+    return item;
+  });
+
+  updateCartModal(); // Atualiza o carrinho com os novos preços
+  alert(`Parabéns! Você ganhou ${discount}% de desconto.`);
+}
 
 // Função para buscar os dados da API
 async function fetchMenu() {
@@ -93,21 +189,47 @@ function updateCartCount() {
   document.getElementById("cart-count").textContent = `(${cartCount})`;
 }
 
-// Remover produto do carrinho
-function removeFromCart(productId) {
-  cart = cart.filter((item) => item.id !== productId);
+// Remover produto do carrinho (decrementar quantidade ou remover completamente)
+function decrementProductQuantity(productId) {
+  const productIndex = cart.findIndex((item) => item.id === productId);
+
+  if (productIndex !== -1) {
+    if (cart[productIndex].quantity > 1) {
+      // Decrementa a quantidade
+      cart[productIndex].quantity -= 1;
+    } else {
+      // Remove o item completamente
+      cart.splice(productIndex, 1);
+    }
+  }
+
   updateCartCount();
   updateCartModal();
 }
 
-// Atualizar o conteúdo do modal com os itens do carrinho
-function updateCartModal() {
-  const modalContent = document.querySelector("#cartModal .modal-content");
-  modalContent.innerHTML = ""; // Limpa o conteúdo atual
+function applyDiscount() {
+  const discount = 10; // Desconto de 10%
+  
+  // Aplica o desconto no preço de cada item
+  cart = cart.map((item) => {
+    item.price = item.price * (1 - discount / 100); // Aplica o desconto
+    return item;
+  });
 
+  // Atualiza o modal para mostrar o desconto
+  updateCartModal(true); // Passando 'true' para mostrar a mensagem de desconto
+  alert(`Parabéns! Você ganhou ${discount}% de desconto.`);
+}
+
+function updateCartModal(hasDiscount = false) {
+  const modalContent = document.querySelector("#cartModal .modal-content");
+  modalContent.innerHTML = ""; // Limpa o conteúdo atual do modal
+
+  // Verifica se há itens no carrinho
   if (cart.length === 0) {
     modalContent.innerHTML = "<p>Seu carrinho está vazio.</p>";
   } else {
+    // Exibe os itens do carrinho
     cart.forEach((item) => {
       const productDiv = document.createElement("div");
       productDiv.classList.add("cart-item");
@@ -119,14 +241,24 @@ function updateCartModal() {
       modalContent.appendChild(productDiv);
     });
 
-    // Adiciona o total
+    // Calcula o total do carrinho
     const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     const totalDiv = document.createElement("div");
     totalDiv.classList.add("total");
     totalDiv.innerHTML = `<h3>Total: R$ ${total.toFixed(2)}</h3>`;
     modalContent.appendChild(totalDiv);
 
-    // Adiciona o campo de endereço
+    // Exibe a mensagem de desconto, se houver
+    if (hasDiscount) {
+      const discountMessage = document.createElement("div");
+      discountMessage.classList.add("discount-message");
+      discountMessage.innerHTML = `
+        <p class="text-success">Desconto de 10% aplicado como prêmio do mini-game!</p>
+      `;
+      modalContent.insertBefore(discountMessage, modalContent.firstChild); // Coloca no topo do modal
+    }
+
+    // Campo de endereço
     const addressDiv = document.createElement("div");
     addressDiv.classList.add("address");
     addressDiv.innerHTML = `
@@ -143,7 +275,7 @@ function updateCartModal() {
     modalContent.appendChild(whatsappButton);
   }
 
-  // Evento para remover itens ao clicar no botão "Remover 1"
+  // Adiciona o evento para remover itens do carrinho
   document.querySelectorAll(".remove-item").forEach((button) => {
     button.addEventListener("click", (e) => {
       const productId = parseInt(e.target.dataset.id);
@@ -152,7 +284,6 @@ function updateCartModal() {
   });
 }
 
-// Função para gerar e enviar o pedido para WhatsApp
 function sendOrderToWhatsApp() {
   const phoneNumber = "67991836252"; // Coloque o número de WhatsApp aqui (ex: com DDD e código do país)
   const address = document.querySelector("#address").value || "Endereço não informado";
@@ -162,23 +293,28 @@ function sendOrderToWhatsApp() {
     return;
   }
 
-  let message = "Olá, gostaria de fazer o seguinte pedido:\n\n";
+  let message = "🚀 *Pedido realizado na Espaço Jasmim*\n\n";
+  message += "Aqui estão os itens que você escolheu:\n\n";
 
   cart.forEach((item) => {
-    message += `- ${item.quantity}x ${item.name} (R$ ${(item.price * item.quantity).toFixed(2)})\n`;
+    message += `📦 *${item.quantity}x ${item.name}* (R$ ${(item.price * item.quantity).toFixed(2)})\n`;
   });
 
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  message += `\nTotal: R$ ${total.toFixed(2)}\n`;
-  message += `Endereço de entrega: ${address}`;
+  message += `\n💰 *Total*: R$ ${total.toFixed(2)}\n`;
+  message += `🛵 *Endereço de entrega*: ${address}\n\n`;
 
+  message += "📱 Para mais informações, entre em contato conosco!\n\n";
+  message += "📞 Horário de funcionamento: 9h - 18h de segunda a sexta-feira\n";
+  message += "📱 Siga nossas redes sociais: https://www.instagram.com/jhonywillian2018/\n";
+  message += "\n❤️ Agradecemos por escolher a Espaço Jasmim!\n\n";
+  
   // Codifica a mensagem para o formato de URL
-  const encodedMessage = encodeURIComponent(message,message2);
+  const encodedMessage = encodeURIComponent(message);
 
   // Abre o WhatsApp com a mensagem
   window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, "_blank");
 }
-
 
 // Finalizar compra
 function finalizarCompra() {
@@ -271,9 +407,11 @@ function updateCartCount() {
   }
 }
 
+
 // Inicializar o menu e carrinho ao carregar a página
 window.onload = function () {
   fetchMenu();
-  updateStatus();
   initializeCart();
+  updateStatus();
+
 };
