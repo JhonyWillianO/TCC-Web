@@ -87,7 +87,7 @@ Agora, o projeto estará rodando localmente em http://localhost:3000.
 
 ## Links Importantes
 
-- [World do TCC - Documentação Completa](https://docs.google.com/document/d/1C1xGlQ7D48dGEjzih7nDFeEraCE7HPAT/edit?usp=sharing&ouid=103039358260410191770&rtpof=true&sd=true)
+- [World do TCC - Documentação Completa](https://docs.google.com/document/d/1I4HzQqBTV_OMKqqFC7M_MSuWINMOX-73/edit?usp=sharing&ouid=103039358260410191770&rtpof=true&sd=true)
 - [Site da Lanchonete Espaço Jasmim - Acesso ao Sistema](https://lanchonetejasmim.netlify.app)
 
 
